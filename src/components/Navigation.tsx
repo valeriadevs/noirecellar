@@ -112,17 +112,12 @@
         }`}
         aria-hidden={!isMobileMenuOpen}
       >
-        {/* Backdrop: blur/opacity applied ONLY to the page behind */}
+        {/* Solid opaque background for the entire menu area */}
         <div
-          className="absolute inset-0 bg-background/55 backdrop-blur-md"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-
-        {/* Menu Panel: readable surface (no blur on the buttons/text) */}
-        <div
-          className={`absolute inset-0 border-t border-primary/20 bg-background/85 transition-transform duration-500 ${
+          className={`absolute inset-0 border-t border-primary/20 bg-background transition-transform duration-500 ${
             isMobileMenuOpen ? "translate-y-0" : "-translate-y-4"
           }`}
+          onClick={() => setIsMobileMenuOpen(false)}
         >
           <div className="container mx-auto px-6 py-10">
             <div className="flex flex-col gap-7">
