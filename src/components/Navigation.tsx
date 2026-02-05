@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 const navItems = [{
   label: "About",
@@ -20,55 +20,6 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const menuRef = useRef<HTMLDivElement>(null);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Handle Escape key to close menu
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === "Escape" && isMobileMenuOpen) {
-      setIsMobileMenuOpen(false);
-      menuButtonRef.current?.focus();
-    }
-  }, [isMobileMenuOpen]);
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
-
-  // Focus trapping within mobile menu
-  useEffect(() => {
-    if (!isMobileMenuOpen || !menuRef.current) return;
-
-    const focusableElements = menuRef.current.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    // Focus first menu item when opened
-    firstElement?.focus();
-
-    const trapFocus = (e: KeyboardEvent) => {
-      if (e.key !== "Tab") return;
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement?.focus();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement?.focus();
-        }
-      }
-    };
-
-    document.addEventListener("keydown", trapFocus);
-    return () => document.removeEventListener("keydown", trapFocus);
-  }, [isMobileMenuOpen]);
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -133,14 +84,7 @@ const Navigation = () => {
              </div>
  
              {/* Mobile Menu Button */}
-              <button
-                ref={menuButtonRef}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden text-foreground p-2"
-                aria-label="Toggle menu"
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="mobile-menu"
-              >
+             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden text-foreground p-2" aria-label="Toggle menu">
                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
              </button>
            </div>
@@ -151,9 +95,6 @@ const Navigation = () => {
        <div
          className={`md:hidden fixed inset-0 z-[60] transition-opacity duration-500 ${isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
          aria-hidden={!isMobileMenuOpen}
-       id="mobile-menu"
-       role="dialog"
-       aria-modal="true"
        >
          {/* Backdrop: blurred + semi-opaque across the whole screen */}
          <button
@@ -165,7 +106,6 @@ const Navigation = () => {
 
          {/* Panel: fully opaque, fills viewport under the fixed nav */}
          <div
-           ref={menuRef}
            className={`absolute left-0 right-0 top-20 bottom-0 border-t border-primary/20 bg-background transition-transform duration-500 ${isMobileMenuOpen ? "translate-y-0" : "-translate-y-4"}`}
          >
            <div className="container mx-auto h-full px-6 py-10">
