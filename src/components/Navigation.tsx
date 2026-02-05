@@ -91,27 +91,45 @@ const Navigation = () => {
          </div>
        </div>
  
-      {/* Mobile Menu Overlay (starts below the nav bar) */}
-      <div className={`md:hidden fixed top-20 left-0 right-0 bottom-0 z-[60] transition-all duration-500 ${isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`} aria-hidden={!isMobileMenuOpen}>
-        {/* Solid opaque background for the entire menu area */}
-        <div className={`absolute inset-0 border-t border-primary/20 bg-background transition-transform duration-500 ${isMobileMenuOpen ? "translate-y-0" : "-translate-y-4"}`} onClick={() => setIsMobileMenuOpen(false)}>
-          <div className="container mx-auto px-6 py-10 bg-primary-foreground">
-            <div className="flex flex-col gap-7">
-              {navItems.map(item => <button key={item.label} onClick={() => handleNavClick(item.href)} className={`text-left text-base uppercase tracking-widest transition-colors duration-300 ${activeSection === item.href.slice(1) ? "text-primary" : "text-muted-foreground hover:text-foreground"}`} style={{
-              letterSpacing: "0.15em"
-            }}>
-                  {item.label}
-                </button>)}
+       {/* Mobile Menu Overlay */}
+       <div
+         className={`md:hidden fixed inset-0 z-[60] transition-opacity duration-500 ${isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+         aria-hidden={!isMobileMenuOpen}
+       >
+         {/* Backdrop: blurred + semi-opaque across the whole screen */}
+         <button
+           type="button"
+           aria-label="Close menu"
+           onClick={() => setIsMobileMenuOpen(false)}
+           className={`absolute inset-0 bg-background/55 backdrop-blur-md transition-opacity duration-500 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"}`}
+         />
 
-              <div className="pt-4">
-                <button onClick={() => setIsMobileMenuOpen(false)} className="link-arrow">
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+         {/* Panel: fully opaque, fills viewport under the fixed nav */}
+         <div
+           className={`absolute left-0 right-0 top-20 bottom-0 border-t border-primary/20 bg-background transition-transform duration-500 ${isMobileMenuOpen ? "translate-y-0" : "-translate-y-4"}`}
+         >
+           <div className="container mx-auto h-full px-6 py-10">
+             <div className="flex h-full flex-col gap-7">
+               {navItems.map((item) => (
+                 <button
+                   key={item.label}
+                   onClick={() => handleNavClick(item.href)}
+                   className={`text-left text-base uppercase tracking-widest transition-colors duration-300 ${activeSection === item.href.slice(1) ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
+                   style={{ letterSpacing: "0.15em" }}
+                 >
+                   {item.label}
+                 </button>
+               ))}
+
+               <div className="mt-auto pt-6">
+                 <button onClick={() => setIsMobileMenuOpen(false)} className="link-arrow">
+                   Close
+                 </button>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
      </nav>;
 };
 export default Navigation;
