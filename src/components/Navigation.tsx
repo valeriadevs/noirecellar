@@ -35,6 +35,15 @@
      window.addEventListener("scroll", handleScroll);
      return () => window.removeEventListener("scroll", handleScroll);
    }, []);
+
+   useEffect(() => {
+     if (!isMobileMenuOpen) return;
+     const prevOverflow = document.body.style.overflow;
+     document.body.style.overflow = "hidden";
+     return () => {
+       document.body.style.overflow = prevOverflow;
+     };
+   }, [isMobileMenuOpen]);
  
    const handleNavClick = (href: string) => {
      setIsMobileMenuOpen(false);
@@ -95,33 +104,56 @@
          </div>
        </div>
  
-       {/* Mobile Menu */}
-       <div
-        className={`md:hidden fixed top-20 left-0 right-0 bottom-0 bg-background border-b border-primary/20 transition-all duration-500 z-40 ${
-           isMobileMenuOpen
-             ? "opacity-100 translate-y-0"
-             : "opacity-0 -translate-y-4 pointer-events-none"
-         }`}
-       >
-        <div className="container mx-auto px-6 py-10">
-           <div className="flex flex-col gap-6">
-             {navItems.map((item) => (
-               <button
-                 key={item.label}
-                 onClick={() => handleNavClick(item.href)}
-                className={`text-left text-base uppercase tracking-widest transition-colors duration-300 ${
-                   activeSection === item.href.slice(1)
-                     ? "text-primary"
-                     : "text-muted-foreground hover:text-foreground"
-                 }`}
-                 style={{ letterSpacing: "0.15em" }}
-               >
-                 {item.label}
-               </button>
-             ))}
-           </div>
-         </div>
-       </div>
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`md:hidden fixed inset-0 z-[60] transition-all duration-500 ${
+          isMobileMenuOpen
+            ? "opacity-100"
+            : "opacity-0 pointer-events-none"
+        }`}
+        aria-hidden={!isMobileMenuOpen}
+      >
+        {/* Backdrop (opaque + blur) */}
+        <div
+          className="absolute inset-0 bg-background/70 backdrop-blur-md"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+
+        {/* Menu Panel */}
+        <div
+          className={`absolute top-20 left-0 right-0 bottom-0 border-t border-primary/20 transition-transform duration-500 ${
+            isMobileMenuOpen ? "translate-y-0" : "-translate-y-4"
+          }`}
+        >
+          <div className="container mx-auto px-6 py-10">
+            <div className="flex flex-col gap-7">
+              {navItems.map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => handleNavClick(item.href)}
+                  className={`text-left text-base uppercase tracking-widest transition-colors duration-300 ${
+                    activeSection === item.href.slice(1)
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                  style={{ letterSpacing: "0.15em" }}
+                >
+                  {item.label}
+                </button>
+              ))}
+
+              <div className="pt-4">
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="link-arrow"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
      </nav>
    );
  };
