@@ -97,19 +97,19 @@
  
        {/* Mobile Menu */}
        <div
-         className={`md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur-sm border-b border-primary/20 transition-all duration-500 ${
+        className={`md:hidden fixed top-20 left-0 right-0 bottom-0 bg-background border-b border-primary/20 transition-all duration-500 z-40 ${
            isMobileMenuOpen
              ? "opacity-100 translate-y-0"
              : "opacity-0 -translate-y-4 pointer-events-none"
          }`}
        >
-         <div className="container mx-auto px-6 py-8">
+        <div className="container mx-auto px-6 py-10">
            <div className="flex flex-col gap-6">
              {navItems.map((item) => (
                <button
                  key={item.label}
                  onClick={() => handleNavClick(item.href)}
-                 className={`text-left text-sm uppercase tracking-widest transition-colors duration-300 ${
+                className={`text-left text-base uppercase tracking-widest transition-colors duration-300 ${
                    activeSection === item.href.slice(1)
                      ? "text-primary"
                      : "text-muted-foreground hover:text-foreground"
