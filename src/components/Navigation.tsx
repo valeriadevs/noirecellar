@@ -53,12 +53,13 @@
      }
    };
  
-   return (
-     <nav
-       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-         isScrolled ? "bg-background/95 backdrop-blur-sm" : "bg-background"
-       }`}
-     >
+    return (
+      <nav
+        className={`fixed top-0 left-0 right-0 transition-all duration-500 ${
+          // Keep the nav (logo + close/X button) above the mobile overlay so it stays crisp.
+          isMobileMenuOpen ? "z-[70]" : "z-50"
+        } ${isScrolled ? "bg-background/95 backdrop-blur-sm" : "bg-background"}`}
+      >
        <div className="border-b border-primary/20">
          <div className="container mx-auto px-6 lg:px-12">
            <div className="flex items-center justify-between h-20">
@@ -104,24 +105,22 @@
          </div>
        </div>
  
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay (starts below the nav bar) */}
       <div
-        className={`md:hidden fixed inset-0 z-[60] transition-all duration-500 ${
-          isMobileMenuOpen
-            ? "opacity-100"
-            : "opacity-0 pointer-events-none"
+        className={`md:hidden fixed top-20 left-0 right-0 bottom-0 z-[60] transition-all duration-500 ${
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden={!isMobileMenuOpen}
       >
-        {/* Backdrop (opaque + blur) */}
+        {/* Backdrop: blur/opacity applied ONLY to the page behind */}
         <div
-          className="absolute inset-0 bg-background/70 backdrop-blur-md"
+          className="absolute inset-0 bg-background/55 backdrop-blur-md"
           onClick={() => setIsMobileMenuOpen(false)}
         />
 
-        {/* Menu Panel */}
+        {/* Menu Panel: readable surface (no blur on the buttons/text) */}
         <div
-          className={`absolute top-20 left-0 right-0 bottom-0 border-t border-primary/20 transition-transform duration-500 ${
+          className={`absolute inset-0 border-t border-primary/20 bg-background/85 transition-transform duration-500 ${
             isMobileMenuOpen ? "translate-y-0" : "-translate-y-4"
           }`}
         >
