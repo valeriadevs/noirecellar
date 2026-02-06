@@ -63,7 +63,7 @@ const Navigation = () => {
   const mobileOverlay = isMobileMenuOpen
     ? createPortal(
         <div
-          className="md:hidden fixed inset-0 z-[60] flex flex-col"
+          className="md:hidden fixed inset-0 z-[60] flex flex-col animate-fade-in"
           aria-hidden={!isMobileMenuOpen}
         >
           {/* Backdrop: blurred + semi-opaque across the whole screen */}
@@ -75,7 +75,8 @@ const Navigation = () => {
           />
 
           {/* Panel: opaque, starts below nav and fills remaining viewport */}
-          <div className="relative z-10 mt-20 flex-1 border-t border-primary/20 bg-background">
+          <div className="relative z-10 mt-20 flex-1 border-t border-primary/20 bg-background animate-fade-up"
+            style={{ animationDuration: '0.4s' }}>
             <div className="container mx-auto h-full px-6 py-10">
               <div className="flex h-full flex-col gap-7">
                 {navItems.map((item) => (
